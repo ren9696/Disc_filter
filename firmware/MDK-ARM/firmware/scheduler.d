@@ -1,0 +1,10 @@
+firmware\scheduler.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/src/scheduler.c
+firmware\scheduler.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtthread.h
+firmware\scheduler.o: ../RT-Thread/rtconfig.h
+firmware\scheduler.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtdebug.h
+firmware\scheduler.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtdef.h
+firmware\scheduler.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdarg.h
+firmware\scheduler.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtservice.h
+firmware\scheduler.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtm.h
+firmware\scheduler.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtthread.h
+firmware\scheduler.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rthw.h

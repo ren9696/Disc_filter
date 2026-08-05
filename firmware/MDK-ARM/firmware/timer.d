@@ -1,0 +1,10 @@
+firmware\timer.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/src/timer.c
+firmware\timer.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtthread.h
+firmware\timer.o: ../RT-Thread/rtconfig.h
+firmware\timer.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtdebug.h
+firmware\timer.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtdef.h
+firmware\timer.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdarg.h
+firmware\timer.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtservice.h
+firmware\timer.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtm.h
+firmware\timer.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtthread.h
+firmware\timer.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rthw.h

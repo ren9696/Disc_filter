@@ -1,0 +1,10 @@
+firmware\object.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/src/object.c
+firmware\object.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtthread.h
+firmware\object.o: ../RT-Thread/rtconfig.h
+firmware\object.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtdebug.h
+firmware\object.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtdef.h
+firmware\object.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdarg.h
+firmware\object.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtservice.h
+firmware\object.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtm.h
+firmware\object.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtthread.h
+firmware\object.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rthw.h

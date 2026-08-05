@@ -1,0 +1,12 @@
+firmware\signal.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/src/signal.c
+firmware\signal.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+firmware\signal.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
+firmware\signal.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rthw.h
+firmware\signal.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtthread.h
+firmware\signal.o: ../RT-Thread/rtconfig.h
+firmware\signal.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtdebug.h
+firmware\signal.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtdef.h
+firmware\signal.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdarg.h
+firmware\signal.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtservice.h
+firmware\signal.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtm.h
+firmware\signal.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtthread.h

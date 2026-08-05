@@ -1,0 +1,10 @@
+firmware\mempool.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/src/mempool.c
+firmware\mempool.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rthw.h
+firmware\mempool.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtthread.h
+firmware\mempool.o: ../RT-Thread/rtconfig.h
+firmware\mempool.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtdebug.h
+firmware\mempool.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtdef.h
+firmware\mempool.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdarg.h
+firmware\mempool.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtservice.h
+firmware\mempool.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtm.h
+firmware\mempool.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtthread.h
