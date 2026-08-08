@@ -1,22 +1,21 @@
 #include "button.h"
 #include <rtthread.h>
 #include "main.h"
-
+#include "screen.h"
+#include "beep.h"
 #define PKG_USING_BUTTON 
 #ifdef PKG_USING_BUTTON
 static struct rt_thread button_tid;
-
 #define BUTTON_THREAD_STACK_SIZE 512
 #define BUTTON_THREAD_PRIORITY 15
 #define BUTTON_THREAD_TIMESLICE 20
-
 static char button_stack[BUTTON_THREAD_STACK_SIZE];
 INIT_APP_EXPORT(Button_init);   
 Button_t key_up;
 Button_t key_down;
 Button_t key_ok;
-Button_t key_stop;
 Button_t key_back;
+Button_t manual;
 static struct button* Head_Button = RT_NULL;
 static char *StrnCopy(char *dst, const char *src, rt_uint32_t n);
 static void Add_Button(Button_t* btn);
@@ -328,48 +327,78 @@ static void Add_Button(Button_t* btn)
 
 rt_uint8_t key_up_read_level(void)
 {
-	return (rt_uint8_t)HAL_GPIO_ReadPin(KEY3_UP_GPIO_Port, KEY3_UP_Pin);
+	return (rt_uint8_t)HAL_GPIO_ReadPin(KEY3_S4_GPIO_Port, KEY3_S4_Pin);
 }
 
 rt_uint8_t key_down_read_level(void)
 {
-	return (rt_uint8_t)HAL_GPIO_ReadPin(KEY2_DOWN_GPIO_Port, KEY2_DOWN_Pin);
+	return (rt_uint8_t)HAL_GPIO_ReadPin(KEY2_S3_GPIO_Port, KEY2_S3_Pin);
 }
 
 rt_uint8_t key_ok_read_level(void)
 {
-	return (rt_uint8_t)HAL_GPIO_ReadPin(KEY1_OK_GPIO_Port, KEY1_OK_Pin);
+	return (rt_uint8_t)HAL_GPIO_ReadPin(KEY1_S2_GPIO_Port, KEY1_S2_Pin);
 }
 
-rt_uint8_t key_stop_read_level(void)
+rt_uint8_t key_back_level(void)
 {
-	return (rt_uint8_t)HAL_GPIO_ReadPin(KEY4_STOP_GPIO_Port, KEY4_STOP_Pin);
+	return (rt_uint8_t)HAL_GPIO_ReadPin(KEY4_S5_GPIO_Port, KEY4_S5_Pin);
 }
 
-rt_uint8_t key_back_read_level(void)
+rt_uint8_t key_manual_read_level(void)
 {
-	return (rt_uint8_t)HAL_GPIO_ReadPin(KEY0_BACK_GPIO_Port, KEY0_BACK_Pin);
+	return (rt_uint8_t)HAL_GPIO_ReadPin(KEY0_S1_GPIO_Port, KEY0_S1_Pin);
 }
 
 void key_up_down_callback(void *arg)
 {
-        
+        beep_send(BEEP_MSG_TYPE_1);
 }
+
 void key_down_down_callback(void *arg)
 {
-	
+	beep_send(BEEP_MSG_TYPE_1);
 }
+
 void key_ok_down_callback(void *arg)
 {
-        
+	beep_send(BEEP_MSG_TYPE_1);
+        switch (screen_data.main_page_index)
+	{
+		case SCREEN_PAGE_REALTIME:
+			screen_main_page_switch(SCREEN_PAGE_SETVIEWER);
+			screen_data.setviewer_page_index = SETVIEWER_REAL_BAR_DIFF;
+			break;
+
+		case SCREEN_PAGE_SETVIEWER:
+			screen_setviewer_page_switch();
+			break;
+
+		default:
+			break;
+	}
 }
-void key_stop_down_callback(void *arg)
-{
-        
-}
+
 void key_back_down_callback(void *arg)
 {
-        
+        beep_send(BEEP_MSG_TYPE_1);
+	switch (screen_data.main_page_index)
+	{
+		case SCREEN_PAGE_REALTIME:
+			break;
+
+		case SCREEN_PAGE_SETVIEWER:
+			screen_main_page_switch(SCREEN_PAGE_REALTIME);
+			break;
+
+		default:
+			break;
+	}
+}
+
+void key_manual_down_callback(void *arg)
+{
+        beep_send(BEEP_MSG_TYPE_1);
 }
 
 void button_entry(void *arg)
@@ -380,10 +409,10 @@ void button_entry(void *arg)
 	Button_Attach(&key_down, BUTTON_DOWM, key_down_down_callback);
 	Button_Create("key_ok", &key_ok, key_ok_read_level, 0);
 	Button_Attach(&key_ok, BUTTON_DOWM, key_ok_down_callback);
-	Button_Create("key_stop", &key_stop, key_stop_read_level, 0);
-	Button_Attach(&key_stop, BUTTON_DOWM, key_stop_down_callback);
-	Button_Create("key_back", &key_back, key_back_read_level, 0);
+	Button_Create("key_back", &key_back, key_back_level, 0);
 	Button_Attach(&key_back, BUTTON_DOWM, key_back_down_callback);
+	Button_Create("manual", &manual, key_manual_read_level, 0);
+	Button_Attach(&manual, BUTTON_DOWM, key_manual_down_callback);
 	while(1){
 		Button_Process();
 		rt_thread_mdelay(20);

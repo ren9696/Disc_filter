@@ -54,7 +54,7 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+int s1,s2,s3,s4,s5;
 /* USER CODE END 0 */
 
 /**
@@ -95,11 +95,10 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	rt_thread_mdelay(1000);
-	HAL_GPIO_TogglePin(LED_ZT_GPIO_Port, LED_ZT_Pin);
-	rt_thread_mdelay(1000);
-	HAL_GPIO_TogglePin(LED_ZT_GPIO_Port, LED_ZT_Pin);
+
     /* USER CODE BEGIN 3 */
+	rt_thread_delay(1000);
+	HAL_GPIO_TogglePin(LED_ZT_GPIO_Port, GPIO_PIN_10);
   }
   /* USER CODE END 3 */
 }
@@ -158,26 +157,36 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED_ZT_GPIO_Port, LED_ZT_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, BEEP_Pin|LED_ZT_Pin|SCREEN_PWR_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : KEY1_OK_Pin KEY2_DOWN_Pin KEY3_UP_Pin KEY4_STOP_Pin */
-  GPIO_InitStruct.Pin = KEY1_OK_Pin|KEY2_DOWN_Pin|KEY3_UP_Pin|KEY4_STOP_Pin;
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, SCREEN_CS_Pin|SCREEN_RD_Pin|SCREEN_WR_Pin|SCREEN_DATA_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : KEY1_S2_Pin KEY2_S3_Pin KEY3_S4_Pin KEY4_S5_Pin */
+  GPIO_InitStruct.Pin = KEY1_S2_Pin|KEY2_S3_Pin|KEY3_S4_Pin|KEY4_S5_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : LED_ZT_Pin */
-  GPIO_InitStruct.Pin = LED_ZT_Pin;
+  /*Configure GPIO pins : BEEP_Pin LED_ZT_Pin SCREEN_PWR_Pin */
+  GPIO_InitStruct.Pin = BEEP_Pin|LED_ZT_Pin|SCREEN_PWR_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED_ZT_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : KEY0_BACK_Pin */
-  GPIO_InitStruct.Pin = KEY0_BACK_Pin;
+  /*Configure GPIO pins : SCREEN_CS_Pin SCREEN_RD_Pin SCREEN_WR_Pin SCREEN_DATA_Pin */
+  GPIO_InitStruct.Pin = SCREEN_CS_Pin|SCREEN_RD_Pin|SCREEN_WR_Pin|SCREEN_DATA_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : KEY0_S1_Pin */
+  GPIO_InitStruct.Pin = KEY0_S1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(KEY0_BACK_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(KEY0_S1_GPIO_Port, &GPIO_InitStruct);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 

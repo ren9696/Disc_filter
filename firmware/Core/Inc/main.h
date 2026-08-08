@@ -57,18 +57,30 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define KEY1_OK_Pin GPIO_PIN_0
-#define KEY1_OK_GPIO_Port GPIOC
-#define KEY2_DOWN_Pin GPIO_PIN_1
-#define KEY2_DOWN_GPIO_Port GPIOC
-#define KEY3_UP_Pin GPIO_PIN_2
-#define KEY3_UP_GPIO_Port GPIOC
-#define KEY4_STOP_Pin GPIO_PIN_3
-#define KEY4_STOP_GPIO_Port GPIOC
+#define KEY1_S2_Pin GPIO_PIN_0
+#define KEY1_S2_GPIO_Port GPIOC
+#define KEY2_S3_Pin GPIO_PIN_1
+#define KEY2_S3_GPIO_Port GPIOC
+#define KEY3_S4_Pin GPIO_PIN_2
+#define KEY3_S4_GPIO_Port GPIOC
+#define KEY4_S5_Pin GPIO_PIN_3
+#define KEY4_S5_GPIO_Port GPIOC
+#define BEEP_Pin GPIO_PIN_5
+#define BEEP_GPIO_Port GPIOC
 #define LED_ZT_Pin GPIO_PIN_10
 #define LED_ZT_GPIO_Port GPIOC
-#define KEY0_BACK_Pin GPIO_PIN_9
-#define KEY0_BACK_GPIO_Port GPIOB
+#define SCREEN_PWR_Pin GPIO_PIN_11
+#define SCREEN_PWR_GPIO_Port GPIOC
+#define SCREEN_CS_Pin GPIO_PIN_4
+#define SCREEN_CS_GPIO_Port GPIOB
+#define SCREEN_RD_Pin GPIO_PIN_5
+#define SCREEN_RD_GPIO_Port GPIOB
+#define SCREEN_WR_Pin GPIO_PIN_6
+#define SCREEN_WR_GPIO_Port GPIOB
+#define SCREEN_DATA_Pin GPIO_PIN_7
+#define SCREEN_DATA_GPIO_Port GPIOB
+#define KEY0_S1_Pin GPIO_PIN_9
+#define KEY0_S1_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
