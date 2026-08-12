@@ -7,6 +7,7 @@
 "firmware\main.o"
 "firmware\stm32f1xx_it.o"
 "firmware\stm32f1xx_hal_msp.o"
+"firmware\save.o"
 "firmware\stm32f1xx_hal_gpio_ex.o"
 "firmware\stm32f1xx_hal.o"
 "firmware\stm32f1xx_hal_rcc.o"

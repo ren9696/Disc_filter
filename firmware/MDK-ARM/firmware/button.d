@@ -38,3 +38,4 @@ firmware\button.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h
 firmware\button.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
 firmware\button.o: ../Core/Inc/screen.h
 firmware\button.o: ../Core/Inc/beep.h
+firmware\button.o: ../Core/Inc/save.h

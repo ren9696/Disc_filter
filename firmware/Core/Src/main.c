@@ -54,7 +54,7 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-int s1,s2,s3,s4,s5;
+
 /* USER CODE END 0 */
 
 /**

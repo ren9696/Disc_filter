@@ -1,0 +1,10 @@
+{
+    // 编辑器代码字体
+    "editor.fontFamily": "'Victor Mono', Consolas, monospace",
+    "editor.fontSize": 15,
+    "editor.fontLigatures": true,  //开启连字
+
+    // 集成终端字体，需要单独写
+    "terminal.integrated.fontFamily": "'Victor Mono', Consolas, monospace",
+    "terminal.integrated.fontSize":14
+}

@@ -29,26 +29,34 @@
 
 /* Whether long-press release is supported or not. If this macro definition is turned on, a long press is triggered after a long press release.
     Otherwise, long press is triggered for a long time, the trigger period is determined by BUTTON_LONG_CYCLE*/
-#define LONG_FREE_TRIGGER              
+//#define LONG_FREE_TRIGGER              
+#define BUTTON_CALL_CYCLE 20 //MS
 
 #ifndef  BUTTON_DEBOUNCE_TIME
 #define BUTTON_DEBOUNCE_TIME   2   //Debounce time  (n-1)*call cycle
 #endif
 
 #ifndef  BUTTON_CONTINUOS_CYCLE
-#define BUTTON_CONTINUOS_CYCLE  1  //Double-click the trigger cycle time  (n-1)*call cycle
+#define BUTTON_CONTINUOS_CYCLE  100/BUTTON_CALL_CYCLE  //Double-click the trigger cycle time  (n-1)*call cycle
 #endif
 
+#define BUTTON_CONTINUOS_DELAY  1000/BUTTON_CALL_CYCLE   /* 连按开始延迟 (n-1)*call cycle ≈ 300ms */
+
+#define BUTTON_CONTINUOS_DELAY2  3000/BUTTON_CALL_CYCLE   /* 连按开始延迟 (n-1)*call cycle ≈ 300ms */
+#if 0
 #ifndef  BUTTON_LONG_CYCLE
-#define BUTTON_LONG_CYCLE       1  //Long press trigger cycle time   (n-1)*call cycle
+#define BUTTON_LONG_CYCLE       100/BUTTON_CALL_CYCLE  //Long press trigger cycle time   (n-1)*call cycle  //MS
+#endif
 #endif
 
+#if 0
 #ifndef  BUTTON_DOUBLE_TIME
 #define BUTTON_DOUBLE_TIME      15 //Double click interval  (n-1)*call cycle  Recommended at 200-600ms
 #endif
+#endif
 
 #ifndef BUTTON_LONG_TIME
-#define BUTTON_LONG_TIME       50  //For n seconds ((n-1)*call cycle)ms, think long press event
+#define BUTTON_LONG_TIME       1500/BUTTON_CALL_CYCLE  //For n seconds ((n-1)*call cycle)ms, think long press event
 #endif
 
 
@@ -59,15 +67,26 @@
 typedef void (*Button_CallBack)(void*);   //The button triggers the callback function and needs to be implemented by the user.
 
 
+typedef enum {
+    HOLD_MODE_NONE = 0,   
+    HOLD_MODE_CONTINUOS,  
+    HOLD_MODE_LONG,       
+} Hold_Mode;
+
+
+typedef enum {
+    TRIGGER_ON_PRESS  = 0,   
+    TRIGGER_ON_RELEASE,      
+} Trigger_Time;
 
 typedef enum {
   BUTTON_DOWM = 0,
   BUTTON_UP,
   BUTTON_DOUBLE,
-  BUTTON_LONG,
-  BUTTON_LONG_FREE,
   BUTTON_CONTINUOS,
-  BUTTON_CONTINUOS_FREE,
+  BUTTON_LONG,
+  //BUTTON_LONG_FREE,
+  //BUTTON_CONTINUOS_FREE,
   BUTTON_ALL_RIGGER,
   number_of_event,                         /* The event that triggered the callback */
   NONE_TRIGGER
@@ -89,13 +108,17 @@ typedef struct button
   rt_uint8_t Button_Trigger_Level      :   2;    /* Button trigger level */
   rt_uint8_t Button_Last_Level         :   2;    /* Button current level */
   
-  rt_uint8_t Button_Trigger_Event;               /* Button trigger event, click, double click, long press, etc. */
-  
+    rt_uint8_t Button_Trigger_Event;               /* Button trigger event, click, double click, long press, etc. */
+  rt_uint8_t hold_mode;
+  rt_uint8_t trigger_time;                       /* 单击事件触发时机：TRIGGER_ON_PRESS / TRIGGER_ON_RELEASE */
+
   Button_CallBack CallBack_Function[number_of_event];
   
   rt_uint8_t Button_Cycle;                       /* Continuous button cycle */
   
   rt_uint8_t Timer_Count;                        /* Timing */
+  rt_uint8_t Timer_Count2;                       /* 2Timing counter*/
+  //rt_uint8_t Timer_Count2_en;                       /* 2Timing enable*/
   rt_uint8_t Debounce_Time;                      /* Debounce time */
   
   rt_uint8_t Long_Time;                          /* Button press duration */
@@ -133,6 +156,8 @@ rt_uint8_t Get_Button_Event(Button_t *btn);
 rt_uint8_t Get_Button_State(Button_t *btn);
 
 void Button_Process_CallBack(void *btn);
+
+void Button_SetTriggerTime(Button_t *btn, rt_uint8_t trigger_time);
 
 
 #endif

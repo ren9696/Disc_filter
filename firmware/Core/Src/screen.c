@@ -13,6 +13,8 @@
 #include "main.h"
 #include "rtthread.h"
 #include "pwr.h"
+#include "save.h"
+
 static struct rt_thread screen_tid;
 struct rt_timer screen_work_timer;
 #define SCREEN_THREAD_STACK_SIZE 1024
@@ -28,9 +30,11 @@ INIT_APP_EXPORT(screen_init);
 #define HT1621B_DATA_HIGH()	HAL_GPIO_WritePin(SCREEN_DATA_GPIO_Port, SCREEN_DATA_Pin, GPIO_PIN_SET)
 #define SCREEN_SYMOBOL_CNT 19+1
 #define SCREEN_RAM_BUFF_SIZE (32)
+rt_uint32_t screen_realtime_page_switch_cnt = 0;
 uint8_t screen_display_ram[SCREEN_RAM_BUFF_SIZE]; 
 struct screen_data_t screen_data;
-
+#define SCREEN_DISPLAY_PERIOD 100 //MS
+#define SCREEN_DISPLAY_REALPAGE_SWITCH_TIME 4000 //MS
 static uint8_t screen_symobol_list[SCREEN_SYMOBOL_CNT] = { //seg com
 	0,
 	(1  << 4) | 1, 
@@ -404,7 +408,28 @@ static void screen_display_state_real_bar_diff(void)
 
 static void screen_display_realtime()
 {
-	screen_display_state_real_bar_diff();
+	screen_realtime_page_switch_cnt++;
+	if (screen_realtime_page_switch_cnt > SCREEN_DISPLAY_REALPAGE_SWITCH_TIME/SCREEN_DISPLAY_PERIOD){ 
+		screen_realtime_page_switch_cnt = 0;
+		ht1621_clear();
+		screen_data.realtime_page_index++;
+		if (screen_data.realtime_page_index >= SCREEN_REALTIME_PAGE_CNT){
+			screen_data.realtime_page_index = REALTIME_PAGE_BAR_DIFF;
+		}
+	}
+
+	switch (screen_data.realtime_page_index){
+		case REALTIME_PAGE_BAR_DIFF:
+			screen_display_state_real_bar_diff();
+			break;
+
+		case REALTIME_PAGE_REVERSE_PERIOD:
+			screen_display_state_reverse_Period();
+			break;
+
+		default:
+			break;
+	}
 }
 
 static void screen_setviewer_real_bar_diff()
@@ -430,7 +455,7 @@ static void screen_setviewer_rever_time_period()
         ht1621_display_symbol(SCREEN_SYMOBOL_M6, 1);
 	ht1621_display_symbol(SCREEN_SYMOBOL_M7, 1);
 	screen_display_real_bardiff_num(0);
-	screen_display_reverse_num(0);
+	screen_display_reverse_num(save_set_data.rever_period_m);
 }
 
 static void screen_setviewer_know()
@@ -439,7 +464,7 @@ static void screen_setviewer_know()
 	screen_display_reverse_num(0);
 }
 
-static void screen_display_setviewer()
+static void screen_display_main_setviewer()
 {
 	switch (screen_data.setviewer_page_index){
 		case SETVIEWER_REAL_BAR_DIFF:
@@ -463,10 +488,122 @@ static void screen_display_setviewer()
 	}
 }
 
+static void screen_display_setting_rever_period()
+{
+	ht1621_display_symbol(SCREEN_SYMOBOL_M1, 1);
+	ht1621_display_symbol(SCREEN_SYMOBOL_M15, 1);
+	ht1621_display_symbol(SCREEN_SYMOBOL_M14, 1);
+	screen_display_time_symbol();
+	
+	uint8_t h1 = save_set_data.rever_period_h / 10;
+	uint8_t h2 = save_set_data.rever_period_h % 10;
+	uint8_t m1 = save_set_data.rever_period_m / 10;
+	uint8_t m2 = save_set_data.rever_period_m % 10;
+	ht1621_display_number(1, h1);
+	ht1621_display_number(2, h2);
+	ht1621_display_number(3, m1);
+	ht1621_display_number(4, m2);
+}
+
+static void screen_display_setting_rever_time()
+{
+	ht1621_display_symbol(SCREEN_SYMOBOL_M2, 1);
+	ht1621_display_symbol(SCREEN_SYMOBOL_M17, 1);
+	ht1621_display_symbol(SCREEN_SYMOBOL_M16, 1);
+	uint8_t h1 = save_set_data.rever_time_m / 10;
+	uint8_t h2 = save_set_data.rever_time_m % 10;
+	uint8_t m1 = save_set_data.rever_time_s / 10;
+	uint8_t m2 = save_set_data.rever_time_s % 10;
+	ht1621_display_number(1, h1);
+	ht1621_display_number(2, h2);
+	ht1621_display_number(3, m1);
+	ht1621_display_number(4, m2);
+}
+
+static void screen_display_setting_station_interval()
+{
+	ht1621_display_symbol(SCREEN_SYMOBOL_M3, 1);
+	ht1621_display_symbol(SCREEN_SYMOBOL_M16, 1);
+	uint8_t m1 = save_set_data.station_interval / 10;
+	uint8_t m2 = save_set_data.station_interval % 10;
+	ht1621_display_number(3, m1);
+	ht1621_display_number(4, m2);
+}
+
+static void screen_display_setting_rever_bar_diff()
+{
+	ht1621_display_symbol(SCREEN_SYMOBOL_M4, 1);
+	ht1621_display_symbol(SCREEN_SYMOBOL_M13, 1);
+	ht1621_display_symbol(SCREEN_SYMOBOL_M19, 1);
+	uint8_t m1 = save_set_data.rever_bar_diff / 10;
+	uint8_t m2 = save_set_data.rever_bar_diff % 10;
+	ht1621_display_number(3, m1);
+	ht1621_display_number(4, m2);
+}
+
+static void screen_display_setting_main_valve()
+{
+	ht1621_display_symbol(SCREEN_SYMOBOL_M11, 1);
+	uint8_t m3 = save_set_data.main_valve / 10;
+	uint8_t m4 = save_set_data.main_valve % 10;
+	ht1621_display_number(3, m3);
+	ht1621_display_number(4, m4);
+}
+
+static void screen_display_setting_station_num()
+{
+	ht1621_display_symbol(SCREEN_SYMOBOL_M5, 1);
+	uint8_t m1 = save_set_data.station_num / 10;
+	uint8_t m2 = save_set_data.station_num % 10;
+	ht1621_display_number(3, m1);
+	ht1621_display_number(4, m2);
+}
+
+static void screen_display_main_setting()
+{
+	switch (screen_data.setting_page_index){
+		case SETING_PAGE_REVER_PERIOD:
+			screen_display_setting_rever_period();
+			break;
+
+		case SETING_PAGE_REVER_TIME:
+			screen_display_setting_rever_time();
+			break;
+
+		case SETING_PAGE_STATION_INTERVAL:
+			screen_display_setting_station_interval();
+			break;
+
+		case SETING_PAGE_REVER_BAR_DIFF:
+			screen_display_setting_rever_bar_diff();
+			break;
+
+		case SETING_PAGE_MAIN_VALVE:
+			screen_display_setting_main_valve();
+			break;
+
+		case SETING_PAGE_STATION_NUM:
+			screen_display_setting_station_num();
+			break;
+			
+		default:
+			break;
+	}
+}
+
+void screen_seting_page_switch(void )
+{
+	ht1621_clear();
+	screen_data.setting_page_index++;
+	if (screen_data.setting_page_index >= SETING_PAGE_CNT){
+		screen_data.setting_page_index = SETING_PAGE_REVER_PERIOD;
+	}
+}
+
 void (*screen_main_pages[])(void) = {
-	screen_page_none,
 	screen_display_realtime,
-	screen_display_setviewer
+	screen_display_main_setviewer,
+	screen_display_main_setting
 };
 
 void screen_main_page_switch(enum screen_main_page_e page)
@@ -494,7 +631,7 @@ void screen_entry(void *arg)
 	while(1){
 		screen_main_pages[screen_data.main_page_index]();
 		ht1621_updata();
-		rt_thread_mdelay(100);		
+		rt_thread_mdelay(SCREEN_DISPLAY_PERIOD);		
 	}
 }
 

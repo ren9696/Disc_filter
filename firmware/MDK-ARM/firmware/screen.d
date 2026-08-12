@@ -35,3 +35,4 @@ firmware\screen.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/
 firmware\screen.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtm.h
 firmware\screen.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtthread.h
 firmware\screen.o: ../Core/Inc/pwr.h
+firmware\screen.o: ../Core/Inc/save.h

@@ -53,30 +53,42 @@ enum screen_symobol_e {
 };
 
 enum screen_main_page_e {
-	SCREEN_PAGE_NONE=0,
-	SCREEN_PAGE_REALTIME,
+	SCREEN_PAGE_REALTIME = 0,
 	SCREEN_PAGE_SETVIEWER,
 	SCREEN_PAGE_SETING,
 	SCREEN_PAGE_4,
 };
 
 enum screen_realtime_page_e {
-	REALTIME_PAGE_BAR_DIFF=0,
-	REALTIME_PAGE_REVERSE_PERIOD
+	REALTIME_PAGE_BAR_DIFF = 0,
+	REALTIME_PAGE_REVERSE_PERIOD,
+	SCREEN_REALTIME_PAGE_CNT
 };
 
 enum screen_setviewer_page_e {
-	SETVIEWER_REAL_BAR_DIFF=0,   
+	SETVIEWER_REAL_BAR_DIFF = 0,   
 	SETVIEWER_REVER_TIME_BAR_DIFF,
 	SETVIEWER_REVER_TIME_PERIOD,
 	SETVIEWER_KNOW,
 	SETVIEWER_PAGE_CNT
 };
 
+enum screen_setting_page_e {
+	SETTING_PAGE_NONE = 0,
+	SETING_PAGE_REVER_PERIOD,
+	SETING_PAGE_REVER_TIME,
+	SETING_PAGE_STATION_INTERVAL,
+	SETING_PAGE_REVER_BAR_DIFF,
+	SETING_PAGE_MAIN_VALVE,
+	SETING_PAGE_STATION_NUM,
+	SETING_PAGE_CNT
+};
+
 struct screen_data_t {
 	enum screen_main_page_e main_page_index;
 	enum screen_realtime_page_e realtime_page_index;
 	enum screen_setviewer_page_e setviewer_page_index;
+	enum screen_setting_page_e setting_page_index;
 };
 
 extern struct screen_data_t screen_data;
@@ -89,4 +101,6 @@ void ht1621_set_pixel(uint8_t seg, uint8_t com, uint8_t on);
 static void screen_display_state_real_bar_diff(void);
 void screen_main_page_switch(enum screen_main_page_e page);
 void screen_setviewer_page_switch(void);
+void screen_seting_page_switch(void );
+static void screen_display_setting_rever_period(void);
 #endif

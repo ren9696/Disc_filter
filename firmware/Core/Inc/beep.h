@@ -16,6 +16,7 @@
 enum beep_smg_type_e{
 	BEEP_MSG_TYPE_NONE=0,
 	BEEP_MSG_TYPE_1,
+	BEEP_MSG_TYPE_2,
 };
 
 int beep_init(void);

@@ -34,3 +34,4 @@ firmware\beep.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdarg.h
 firmware\beep.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtservice.h
 firmware\beep.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtm.h
 firmware\beep.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtthread.h
+firmware\beep.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdbool.h
