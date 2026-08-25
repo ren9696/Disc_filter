@@ -50,12 +50,17 @@ enum screen_symobol_e {
 	SCREEN_SYMOBOL_M17,
 	SCREEN_SYMOBOL_M18,
 	SCREEN_SYMOBOL_M19,
+	SCREEN_SYMOBOL_X0,
+	SCREEN_SYMOBOL_X1,
+	SCREEN_SYMOBOL_X2
 };
 
 enum screen_main_page_e {
 	SCREEN_PAGE_REALTIME = 0,
 	SCREEN_PAGE_SETVIEWER,
 	SCREEN_PAGE_SETING,
+	SCREEN_PAGE_REVERSING,
+	SCREEN_PAGE_STATION_INTERVAL,
 	SCREEN_PAGE_4,
 };
 
@@ -103,4 +108,6 @@ void screen_main_page_switch(enum screen_main_page_e page);
 void screen_setviewer_page_switch(void);
 void screen_seting_page_switch(void );
 static void screen_display_setting_rever_period(void);
+void ht1621b_close(void);
+void ht1621b_init(void);
 #endif

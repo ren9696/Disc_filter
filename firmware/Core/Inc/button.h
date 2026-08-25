@@ -159,5 +159,5 @@ void Button_Process_CallBack(void *btn);
 
 void Button_SetTriggerTime(Button_t *btn, rt_uint8_t trigger_time);
 
-
+void key_wake_up_handle(void);
 #endif

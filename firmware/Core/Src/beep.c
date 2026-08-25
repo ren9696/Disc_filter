@@ -14,7 +14,7 @@
 #include "stdbool.h"
 static struct rt_thread beep_tid;
 #define BEEP_THREAD_STACK_SIZE 128
-#define BEEP_THREAD_PRIORITY 14
+#define BEEP_THREAD_PRIORITY 13
 #define BEEP_THREAD_TIMESLICE 20
 static char beep_stack[BEEP_THREAD_STACK_SIZE];
 INIT_APP_EXPORT(beep_init);
@@ -32,7 +32,7 @@ void beep_send(enum beep_smg_type_e type)
 
 void beep_ctrl(uint8_t on)
 {
-	#if 0
+	#if 1
 	if (on){
 		HAL_GPIO_WritePin(BEEP_GPIO_Port, BEEP_Pin, GPIO_PIN_SET);
 	} else {
@@ -100,7 +100,7 @@ int beep_init(void)
 			RT_TIMER_FLAG_ONE_SHOT); 
 
 	rt_mq_init(&beep_mq,
-			"ec_msg",
+			"beep_msg",
 			&beep_msg_pool[0],             
 			sizeof(enum beep_smg_type_e),
 			BEEP_MSG_POOL_SIZE,        
@@ -114,6 +114,7 @@ int beep_init(void)
 			BEEP_THREAD_STACK_SIZE,
 			BEEP_THREAD_PRIORITY, 
 			BEEP_THREAD_TIMESLICE);
+			
 	rt_thread_startup(&beep_tid);
 	return 0;
 }
