@@ -83,17 +83,17 @@ void NMI_Handler(void)
 /**
   * @brief This function handles Hard fault interrupt.
   */
-//void HardFault_Handler(void)
-//{
-//  /* USER CODE BEGIN HardFault_IRQn 0 */
+// void HardFault_Handler(void)
+// {
+//   /* USER CODE BEGIN HardFault_IRQn 0 */
 
-//  /* USER CODE END HardFault_IRQn 0 */
-//  while (1)
-//  {
-//    /* USER CODE BEGIN W1_HardFault_IRQn 0 */
-//    /* USER CODE END W1_HardFault_IRQn 0 */
-//  }
-//}
+//   /* USER CODE END HardFault_IRQn 0 */
+//   while (1)
+//   {
+//     /* USER CODE BEGIN W1_HardFault_IRQn 0 */
+//     /* USER CODE END W1_HardFault_IRQn 0 */
+//   }
+// }
 
 /**
   * @brief This function handles Memory management fault.
@@ -248,7 +248,7 @@ void DMA1_Channel1_IRQHandler(void)
 void HAL_RTCEx_RTCEventCallback(RTC_HandleTypeDef *hrtc)
 {
 	if (hrtc->Instance == RTC){
-		HAL_GPIO_TogglePin(LED_ZT_GPIO_Port, GPIO_PIN_10);
+		//HAL_GPIO_TogglePin(SCREEN_PWR_GPIO_Port, SCREEN_PWR_Pin);
 		process_handle();
 	}
 }

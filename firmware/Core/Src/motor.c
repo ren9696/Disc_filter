@@ -130,6 +130,7 @@ void motor_hard_ctrl(struct motor_data_t *motor_data, enum motor_opt_t opt)
  
 int motor_ctrl(enum motor_msg_type_t msg_type, enum motor_opt_t opt)
 {
+	beep_send(BEEP_MSG_TYPE_1);
         switch(msg_type){
 	case MOTOR_MSG_TYPE_1:
 		motor_hard_ctrl(&motor1, opt);
@@ -152,7 +153,7 @@ int motor_ctrl(enum motor_msg_type_t msg_type, enum motor_opt_t opt)
 	default:
 		break;
         }
-	beep_send(BEEP_MSG_TYPE_1);
+	
 	return 0;
 }
 
@@ -185,6 +186,13 @@ void motor_entry(void *parameter)
 	motor6.motor_id = MOTOR_MSG_TYPE_6;
 	motor_hard_info_forward_register(&motor6, M6_FI_GPIO_Port, M6_FI_Pin);
 	motor_hard_info_back_register(&motor6, 	  M6_BI_GPIO_Port, M6_BI_Pin);
+
+	motor_ctrl(MOTOR_MSG_TYPE_1, MOTOR_DIR_OPEN);
+	motor_ctrl(MOTOR_MSG_TYPE_2, MOTOR_DIR_OPEN);
+	motor_ctrl(MOTOR_MSG_TYPE_3, MOTOR_DIR_OPEN);
+	motor_ctrl(MOTOR_MSG_TYPE_4, MOTOR_DIR_OPEN);
+	motor_ctrl(MOTOR_MSG_TYPE_5, MOTOR_DIR_OPEN);
+	motor_ctrl(MOTOR_MSG_TYPE_6, MOTOR_DIR_OPEN);
 
 	while(1){
 		if (rt_mq_recv(&motor_mq, &msg, sizeof(msg), RT_WAITING_FOREVER) == RT_EOK){

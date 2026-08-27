@@ -395,7 +395,6 @@ void ht1621_display_number(uint8_t area, uint8_t num)
 
 void ht1621b_close(void)
 {
-	screen_power_ctrl(SCREEN_PWR_OFF);
 	rt_thread_mdelay(100);
 	HT1621B_CS_HIGH();
 	HT1621B_WR_HIGH();
@@ -404,7 +403,12 @@ void ht1621b_close(void)
 	ht1621_write_cmd(HT1621_CMD_SYS_DIS);
 	ht1621_write_cmd(HT1621_CMD_OFF);
 	rt_thread_mdelay(5);
-	
+	screen_power_ctrl(SCREEN_PWR_OFF);
+	#if 0
+	HT1621B_CS_LOW();
+	HT1621B_WR_LOW();
+	HT1621B_DATA_LOW();
+	#endif
 }
 
 void ht1621b_init(void)
