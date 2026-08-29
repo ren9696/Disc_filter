@@ -5,7 +5,7 @@ firmware/MDK-ARM/JLinkLog.txt
 firmware/MDK-ARM/JLinkSettings.ini
 firmware/MDK-ARM/EventRecorderStub.scvd
 
-# Keil 个人/工程选项文件(随用户、机器变化,不宜入库)
+
 *.uvguix.*
 *.uvoptx
 firmware/MDK-ARM/ExtDll.iex
@@ -20,6 +20,3 @@ bin-release/
 .vscode/
 .settings/
 
-# 参考文档 PDF(仅本地保留,不纳入版本控制)
-Doc/*.pdf
-hardware/*.pdf
