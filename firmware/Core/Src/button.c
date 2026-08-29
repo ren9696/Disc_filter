@@ -114,7 +114,7 @@ void Button_Cycle_Process(Button_t *btn)
 			btn->Button_State = BUTTON_DOWM;
 			btn->Button_Trigger_Event = BUTTON_DOWM;
 
-			// 按下触发：按下瞬间即触发单击 
+			// 这里按下立即触发：按下瞬间即触发单击 
 			if (btn->trigger_time == TRIGGER_ON_PRESS){
 				TRIGGER_CB(BUTTON_DOWM);
 			}
@@ -467,11 +467,10 @@ void key_ok_entry_long_callback(void *arg)
 {
 	switch (screen_data.main_page_index)
 	{
+		case SCREEN_PAGE_REVERSING:
 		case SCREEN_PAGE_REALTIME:
 			beep_send(BEEP_MSG_TYPE_2);
-			process_switch(PROCESS_STATE_STOP);	
-			screen_main_page_switch(SCREEN_PAGE_SETING);
-			screen_data.setting_page_index = SETING_PAGE_REVER_PERIOD;
+			work_send_msg(WORK_MSG_TYPE_STOP);
 			break;
 
 		default:
@@ -489,8 +488,7 @@ void key_back_down_callback(void *arg)
 
 		case SCREEN_PAGE_SETING:
 			save_send_msg(SAVE_MSG_TYPE_SAVE_ALL_DATA);
-			process_switch(PROCESS_STATE_INIT);
-			screen_main_page_switch(SCREEN_PAGE_REALTIME);
+			work_send_msg(WORK_MSG_TYPE_INIT);
 			break;
 
 		case SCREEN_PAGE_SETVIEWER:
@@ -508,7 +506,7 @@ void key_manual_down_callback(void *arg)
 	switch (screen_data.main_page_index)
 	{
 		case SCREEN_PAGE_REALTIME:
-			process_switch(PROCESS_STATE_REVERING);
+			work_send_msg(WORK_MSG_TYPE_MANUAL);
 			break;
 
 		case SCREEN_PAGE_SETING:

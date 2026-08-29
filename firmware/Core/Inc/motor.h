@@ -31,7 +31,7 @@ enum motor_opt_t {
 	MOTOR_DIR_FORWARD,
 	MOTOR_DIR_BACKWARD,
 	MOTOR_DIR_STOP,
-	MOTOR_DIR_OPEN
+	MOTOR_DIR_OPEN	// 当前代表电机不工作，开路，低电平
 };
 
 struct motor_msg_t {

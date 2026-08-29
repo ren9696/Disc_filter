@@ -19,7 +19,7 @@ struct pressure_data_t pressure_data;
 struct pwr_data_t pwr_data;
 static struct rt_thread pwr_tid;
 #define PWR_BATTERY_FULL_MV 4100
-#define PWR_THREAD_STACK_SIZE 256
+#define PWR_THREAD_STACK_SIZE 512
 #define PWR_THREAD_PRIORITY 14
 #define PWR_THREAD_TIMESLICE 20
 #define PWR_MSG_POOL_SIZE 16
@@ -194,8 +194,8 @@ void pwr_wake_up()
         if (pwr_data.state == PWR_STATE_SLEEP){
 		pwr_data.state = PWR_STATE_WAKE_UP;
 		pwr_wake_up_SystemClock_Config();
+		//HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / RT_TICK_PER_SECOND);
 		ht1621b_init();
-		//HAL_ADC_Start_DMA(&hadc1, (rt_uint32_t*)adc_value, ADC_BUF_SIZE*2);
 	}
 
 	rt_timer_stop(&pwr_timer);
@@ -248,9 +248,11 @@ void pwr_sleep()
         pwr_data.state = PWR_STATE_SLEEP;
 	ht1621b_close();
 	pwr_sleep_SystemClock_Config();
+	//HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / RT_TICK_PER_SECOND);
+	
+	/* 当前选择进入SLEEP模式，需要ADC功能一直工作，实时监测气压值。
+	   进入STOP模式后所有时钟会全部停止，ADC会停止。 */
 	HAL_PWR_EnterSLEEPMode(PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFI);
-	//HAL_ADC_Stop_DMA(&hadc1);
-	//HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFI);
 }
 
 void pwr_entry(void *parameter)
@@ -261,14 +263,6 @@ void pwr_entry(void *parameter)
 		rt_mq_recv(&pwr_mq, &msg, sizeof(enum pwr_msg_type_t), RT_WAITING_FOREVER);
 		switch (msg){
 			case PWR_MSG_TYPE_GET_BATTERY_VOLTAGE:
-				break;
-			
-			case PWR_MSG_TYPE_OFF_SCREEN:
-				screen_power_ctrl(SCREEN_PWR_OFF);
-				break;
-
-			case PWR_MSG_TYPE_ON_SCREEN:
-				screen_power_ctrl(SCREEN_PWR_ON);
 				break;
 
 			case PWR_MSG_TYPE_WAKE_UP:

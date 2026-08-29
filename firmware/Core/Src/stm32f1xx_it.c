@@ -248,8 +248,7 @@ void DMA1_Channel1_IRQHandler(void)
 void HAL_RTCEx_RTCEventCallback(RTC_HandleTypeDef *hrtc)
 {
 	if (hrtc->Instance == RTC){
-		//HAL_GPIO_TogglePin(SCREEN_PWR_GPIO_Port, SCREEN_PWR_Pin);
-		process_handle();
+		work_send_msg(WORK_MSG_TYPE_SECOND);
 	}
 }
 /* USER CODE END 1 */

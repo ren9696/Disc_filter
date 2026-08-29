@@ -23,12 +23,7 @@ struct rt_timer screen_work_timer;
 #define SCREEN_THREAD_TIMESLICE 20
 static char screen_stack[SCREEN_THREAD_STACK_SIZE];
 INIT_APP_EXPORT(screen_init);
-#define HT1621B_CS_LOW()  	HAL_GPIO_WritePin(SCREEN_CS_GPIO_Port, SCREEN_CS_Pin, GPIO_PIN_RESET)
-#define HT1621B_CS_HIGH()	HAL_GPIO_WritePin(SCREEN_CS_GPIO_Port, SCREEN_CS_Pin, GPIO_PIN_SET)
-#define HT1621B_WR_LOW()	HAL_GPIO_WritePin(SCREEN_WR_GPIO_Port, SCREEN_WR_Pin, GPIO_PIN_RESET)
-#define HT1621B_WR_HIGH()	HAL_GPIO_WritePin(SCREEN_WR_GPIO_Port, SCREEN_WR_Pin, GPIO_PIN_SET)
-#define HT1621B_DATA_LOW()	HAL_GPIO_WritePin(SCREEN_DATA_GPIO_Port, SCREEN_DATA_Pin, GPIO_PIN_RESET)
-#define HT1621B_DATA_HIGH()	HAL_GPIO_WritePin(SCREEN_DATA_GPIO_Port, SCREEN_DATA_Pin, GPIO_PIN_SET)
+
 #define SCREEN_SYMOBOL_CNT 19+1+3  // 3=x123
 #define SCREEN_RAM_BUFF_SIZE (32)
 rt_uint32_t screen_realtime_page_switch_cnt = 0;
@@ -128,7 +123,7 @@ static uint8_t seg_area[][7] = {
 
 void rt_hw_us_delay(rt_uint32_t us)
 {
-	#if 0
+	#if 1
 	    rt_uint64_t ticks;
 	    rt_uint32_t told, tnow, tcnt = 0;
 	    rt_uint32_t reload = SysTick->LOAD;
@@ -362,7 +357,6 @@ void ht1621_updata(void)
 void ht1621_clear(void)
 {
     	rt_memset(screen_display_ram, 0x00, sizeof(screen_display_ram));
-    	//ht1621_updata();
 }
 
 void screen_page_none(void)
@@ -404,7 +398,7 @@ void ht1621b_close(void)
 	ht1621_write_cmd(HT1621_CMD_OFF);
 	rt_thread_mdelay(5);
 	screen_power_ctrl(SCREEN_PWR_OFF);
-	#if 0
+	#if 1
 	HT1621B_CS_LOW();
 	HT1621B_WR_LOW();
 	HT1621B_DATA_LOW();
@@ -642,7 +636,6 @@ static void screen_display_main_setting()
 
 void screen_seting_page_switch(void )
 {
-	ht1621_clear();
 	screen_data.setting_page_index++;
 	if (screen_data.setting_page_index >= SETING_PAGE_CNT){
 		screen_data.setting_page_index = SETING_PAGE_REVER_PERIOD;
@@ -654,20 +647,20 @@ void screen_display_main_reversing(void)
 	uint8_t minute = 0;
 	uint8_t second = 0;
 	
-	ht1621_display_symbol(SCREEN_SYMOBOL_M2, 1);
+	ht1621_display_symbol(SCREEN_SYMOBOL_M2,  1);
 	ht1621_display_symbol(SCREEN_SYMOBOL_M10, 1);
-	ht1621_display_symbol(SCREEN_SYMOBOL_M9, 1);
-	ht1621_display_symbol(SCREEN_SYMOBOL_M7, 1);
+	ht1621_display_symbol(SCREEN_SYMOBOL_M9,  1);
+	ht1621_display_symbol(SCREEN_SYMOBOL_M7,  1);
 	ht1621_display_symbol(SCREEN_SYMOBOL_M16, 1);
 	ht1621_display_symbol(SCREEN_SYMOBOL_M17, 1);
 
-	if (process_data.time.reversing_count_down > 60){
+	if (process_data.time.reversing_count_down >= 60){
 		minute = process_data.time.reversing_count_down / 60;
 	} else {
 		minute = 0;
 	}
 	
-	if (process_data.time.reversing_count_down <= 60){
+	if (process_data.time.reversing_count_down < 60){
 		second = process_data.time.reversing_count_down;
 	} else {
 		second = process_data.time.reversing_count_down % 60;
@@ -706,13 +699,11 @@ void (*screen_main_pages[])(void) = {
 
 void screen_main_page_switch(enum screen_main_page_e page)
 {
-	ht1621_clear();
 	screen_data.main_page_index = page;
 }
 
 void screen_setviewer_page_switch(void)
 {
-	ht1621_clear();
 	screen_data.setviewer_page_index++;
 	if (screen_data.setviewer_page_index >= SETVIEWER_PAGE_CNT){
 		screen_data.setviewer_page_index = SETVIEWER_REAL_BAR_DIFF;
@@ -721,10 +712,22 @@ void screen_setviewer_page_switch(void)
 
 void screen_entry(void *arg)
 {
+	enum screen_main_page_e last_main_page = SCREEN_PAGE_REALTIME;
+	enum screen_setviewer_page_e last_setviewer_page = SETVIEWER_REAL_BAR_DIFF;
+	enum screen_setting_page_e last_setting_page = SETTING_PAGE_NONE;
+
 	ht1621b_init();
 	screen_main_pages[screen_data.main_page_index]();
 	screen_main_page_switch(SCREEN_PAGE_REALTIME);
 	while(1){
+		if (screen_data.main_page_index != last_main_page ||
+			screen_data.setviewer_page_index != last_setviewer_page ||
+			screen_data.setting_page_index != last_setting_page){
+			last_main_page = screen_data.main_page_index;
+			last_setviewer_page = screen_data.setviewer_page_index;
+			last_setting_page = screen_data.setting_page_index;
+			ht1621_clear();
+		}
 		screen_main_pages[screen_data.main_page_index]();
 		screen_display_battery();
 		ht1621_updata();

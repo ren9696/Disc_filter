@@ -23,6 +23,13 @@ enum process_state_t {
     PROCESS_STATE_STOP,
 };
 
+enum work_msg_type_t {
+	WORK_MSG_TYPE_SECOND = 0,
+	WORK_MSG_TYPE_STOP,
+	WORK_MSG_TYPE_INIT,
+	WORK_MSG_TYPE_MANUAL,
+};
+
 struct process_time_t{
 	int stadying;
 	int reversing;
@@ -42,4 +49,6 @@ extern struct process_data_t process_data;
 
 void process_handle(void);
 void process_switch(enum process_state_t state);
+int work_send_msg(enum work_msg_type_t msg);
+int work_init(void);
 #endif

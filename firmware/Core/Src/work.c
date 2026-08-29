@@ -17,6 +17,96 @@
 #include "screen.h"
 #include "pwr.h"
 struct process_data_t process_data;
+
+#define WORK_THREAD_PRIORITY 10
+#define WORK_THREAD_TIMESLICE 20
+#define WORK_THREAD_STACK_SIZE 1024
+static struct rt_thread work_tid;
+static char work_stack[WORK_THREAD_STACK_SIZE];
+INIT_APP_EXPORT(work_init);
+
+static struct rt_messagequeue work_mq;
+#define WORK_MSG_POOL_SIZE (sizeof(enum work_msg_type_t) * 16)
+static rt_uint8_t work_msg_pool[WORK_MSG_POOL_SIZE];
+
+void process_init(void);
+
+/**
+ * @brief 发送消息给工作线程
+ * 
+ * @param msg 
+ * @return int 0:成功 -1:失败
+ */
+int work_send_msg(enum work_msg_type_t msg)
+{
+	if (rt_mq_send(&work_mq, &msg, sizeof(enum work_msg_type_t)) != RT_EOK){
+		return -1;
+	}
+	return 0;
+}
+
+/**
+ * @brief 工作线程：状态机唯一入口
+ *        秒脉冲和按键命令共用消息队列，保证处理顺序一致
+ * 
+ * @param param 
+ */
+static void work_entry(void *param)
+{
+	enum work_msg_type_t msg;
+	while (1){
+		if (rt_mq_recv(&work_mq, &msg, sizeof(msg), RT_WAITING_FOREVER) == RT_EOK){
+			switch (msg){
+			case WORK_MSG_TYPE_SECOND:
+				process_handle();
+				break;
+
+			case WORK_MSG_TYPE_STOP:
+				process_switch(PROCESS_STATE_STOP);
+				screen_main_page_switch(SCREEN_PAGE_SETING);
+				screen_data.setting_page_index = SETING_PAGE_REVER_PERIOD;
+				break;
+
+			case WORK_MSG_TYPE_INIT:
+				process_init();
+				break;
+
+			case WORK_MSG_TYPE_MANUAL:
+				if (process_data.state == PROCESS_STATE_INIT){
+					process_init();
+				}
+				process_switch(PROCESS_STATE_REVERING);
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+}
+
+int work_init(void)
+{
+	rt_mq_init(&work_mq,
+			"work_msg",
+			&work_msg_pool[0],
+			sizeof(enum work_msg_type_t),
+			WORK_MSG_POOL_SIZE,
+			RT_IPC_FLAG_FIFO);
+
+	rt_thread_init(&work_tid,
+			"WORK",
+			work_entry,
+			RT_NULL,
+			&work_stack[0],
+			WORK_THREAD_STACK_SIZE,
+			WORK_THREAD_PRIORITY,
+			WORK_THREAD_TIMESLICE);
+
+	rt_thread_startup(&work_tid);
+	return 0;
+}
+
 /**
  * @brief 处理状态切换
  * 
@@ -55,7 +145,7 @@ void process_switch(enum process_state_t target_state)
 void process_init(void)
 {
 	process_data.station = 1;
-	process_data.time.reversing_count_down = save_set_data.rever_period_sum_s;
+	process_data.time.reversing_count_down = save_set_data.rever_time_sum_s;
 	process_switch(PROCESS_STATE_STADYING);
 }
 
@@ -97,7 +187,7 @@ void process_revering(void)
 				process_data.reverse_period_num = 0;
 			}
 		} else {
-			process_data.time.station_interval_count_down = PROCESS_STATION_INTERVAL;
+			process_data.time.station_interval_count_down = PROCESS_STATION_INTERVAL;	// 当前站点间隔默认强制设置为5
 			process_switch(PROCESS_STATE_STATION_INTERVAL);
 			screen_main_page_switch(SCREEN_PAGE_STATION_INTERVAL);
 		}
@@ -120,7 +210,7 @@ void process_station_interval(void)
 void process_stop(void)
 {
 	process_data.station = 1;
-	process_data.time.reversing_count_down = save_set_data.rever_period_sum_s;
+	process_data.time.reversing_count_down = save_set_data.rever_time_sum_s;
 	process_data.time.station_interval_count_down = PROCESS_STATION_INTERVAL;
 	process_data.time.stadying = 0;
 }

@@ -21,7 +21,7 @@ struct motor_data_t motor3;
 struct motor_data_t motor4;
 struct motor_data_t motor5;
 struct motor_data_t motor6;
-#define MOTOR_PLUS_MS 200
+#define MOTOR_PLUS_MS 50 // ????50ms
 #if 1
 struct rt_timer motor_timer1;
 struct rt_timer motor_timer2;

@@ -62,7 +62,7 @@ static void MX_RTC_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-int test_data = 0;
+
 /* USER CODE END 0 */
 
 /**
