@@ -1,0 +1,15 @@
+# 统一行尾:文本文件入库统一为 LF,Windows 上检出为 CRLF
+* text=auto
+
+# Keil/Windows 相关文件明确使用 CRLF
+*.c text eol=crlf
+*.h text eol=crlf
+*.s text eol=crlf
+*.uvprojx text eol=crlf
+*.ioc text eol=crlf
+*.txt text eol=crlf
+
+# 二进制文件明确标记,避免被文本转换误处理
+*.pdf binary
+*.lib binary
+*.a binary

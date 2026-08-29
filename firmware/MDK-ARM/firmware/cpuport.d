@@ -1,9 +1,0 @@
-firmware\cpuport.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/libcpu/arm/cortex-m3/cpuport.c
-firmware\cpuport.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtthread.h
-firmware\cpuport.o: ../RT-Thread/rtconfig.h
-firmware\cpuport.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtdebug.h
-firmware\cpuport.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtdef.h
-firmware\cpuport.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdarg.h
-firmware\cpuport.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtservice.h
-firmware\cpuport.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtm.h
-firmware\cpuport.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtthread.h

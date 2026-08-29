@@ -1,19 +1,25 @@
-# Build and Release Folders
+# Keil MDK-ARM 编译产物
+firmware/MDK-ARM/firmware/
+firmware/MDK-ARM/*.lst
+firmware/MDK-ARM/JLinkLog.txt
+firmware/MDK-ARM/JLinkSettings.ini
+firmware/MDK-ARM/EventRecorderStub.scvd
+
+# Keil 个人/工程选项文件(随用户、机器变化,不宜入库)
+*.uvguix.*
+*.uvoptx
+firmware/MDK-ARM/ExtDll.iex
+
+# 常用编译输出目录
+[Bb]in/
+[Oo]bj/
 bin-debug/
 bin-release/
-[Oo]bj/
-[Bb]in/
-soft/water_ec_ph/.vscode/
-/soft/water_ec_ph/MDK-ARM/water_ec_ph/
-# Other files and folders
+
+# IDE
+.vscode/
 .settings/
 
-# Executables
-*.swf
-*.air
-*.ipa
-*.apk
-
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+# 参考文档 PDF(仅本地保留,不纳入版本控制)
+Doc/*.pdf
+hardware/*.pdf

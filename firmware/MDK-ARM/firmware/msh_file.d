@@ -1,9 +1,0 @@
-firmware\msh_file.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/components/finsh/src/msh_file.c
-firmware\msh_file.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtthread.h
-firmware\msh_file.o: ../RT-Thread/rtconfig.h
-firmware\msh_file.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtdebug.h
-firmware\msh_file.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtdef.h
-firmware\msh_file.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdarg.h
-firmware\msh_file.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtservice.h
-firmware\msh_file.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtm.h
-firmware\msh_file.o: ../Middlewares/Third_Party/RealThread_RTOS_RT-Thread/include/rtthread.h
